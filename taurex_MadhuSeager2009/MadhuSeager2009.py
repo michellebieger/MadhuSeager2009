@@ -32,11 +32,12 @@ class RandomTemperatureProfile(TemperatureProfile):
     """
 
     ### Initializing the new class
-    def __init__(self, T_top = 1000, T_1 = 500, T_2 = 200, T_3 = 100, P_1 = 1e-2, P_2 = 1e-1, P_3 = 1e0, alpha_1 = 50, alpha_2 =50):
-        super().__init__('Equilibrium')
+    def __init__(self, T_top = 1000, T_1 = 500, T_2 = 200, T_3 = 100, P_top = 1e-3, P_1 = 1e-2, P_2 = 1e-1, P_3 = 1e0, alpha_1 = 50, alpha_2 =50):
+        super().__init__('Madhu)
 
         self.info('MadhuSeager2009 temperature profile initialised')
         self._T_top = T_top
+        self._P_top = P_top
         self._T_1 = T_1
         self._T_2 = T_2 
         self._T_3 = T_3
@@ -86,8 +87,8 @@ class RandomTemperatureProfile(TemperatureProfile):
 
     
 
-        T_1 = self.T_top + (1/(self.alpha_1**2))(np.log(self.p_top/self.P_1))**2 
-        T_2 = self.T_top + (1/(self.alpha_1**2))(np.log(self.P_1/self.p_top))**2 - (1/(self.alpha_2**2))(np.log(self.P_1/self.P_2))**2
+        T_1 = self.T_top + (1/(self.alpha_1**2))(np.log(self.P_top/self.P_1))**2 
+        T_2 = self.T_top + (1/(self.alpha_1**2))(np.log(self.P_1/self.P_top))**2 - (1/(self.alpha_2**2))(np.log(self.P_1/self.P_2))**2
         T_3 = self.T_2 + (1/(self.alpha_2**2))(np.log(self.P_3/self.P_2))**2
 
         # implementation in Madhu & Seager 2009 uses a Levenberg-Marquardt fitting 
