@@ -1,6 +1,7 @@
 from taurex.temperature import TemperatureProfile
 import numpy as np
 from taurex.data.fittable import fitparam
+import scipy as sp
 
 
 class RandomTemperatureProfile(TemperatureProfile):
@@ -33,6 +34,8 @@ class RandomTemperatureProfile(TemperatureProfile):
     ### Initializing the new class
     def __init__(self, T_top = 1000, T_1 = 500, T_2 = 200, T_3 = 100, P_1 = 1e-2, P_2 = 1e-1, P_3 = 1e0, alpha_1 = 50, alpha_2 =50):
         super().__init__('Equilibrium')
+
+        self.info('MadhuSeager2009 temperature profile initialised')
         self._T_top = T_top
         self._T_1 = T_1
         self._T_2 = T_2 
@@ -63,17 +66,33 @@ class RandomTemperatureProfile(TemperatureProfile):
         """
         # self.T = np.maximum(np.random.normal(self._mean, self._std), 10.0)
         # T = np.zeros((self.nlayers))
+        # creating an array of temp with the number of layers that taurex sets (i guess from the rad tran)
         # T[:] = self.T
-
+        # then have T be that function filling that array (i guess)
         # return T
+        # this is then the result 
 
         p_top = 1e-5 
+        # as set within the paper. bar
         beta = 0.5 
         # both beta_1 and beta_2 in the paper are set to be 0.5 based on experimental factor 
 
-        T_1 = T_top + (1/(alpha_1**2))(np.log(p_top/P_1))**2 
-        T_2 = T_top + (1/(alpha_1**2))(np.log(P_1/p_top))**2 - (1/(alpha_2**2))(np.log(P_1/P_2))**2
-        T_3 = T_2 + (1/(alpha_2**2))(np.log(P_3/P_2))**2
+        self.P_3 = 100 
+        # because three zonal layers set in paper from 10-5 to 100 bar
+
+        self.P_2 = 
+
+        T = np.zeros((self.nlayers))
+
+    
+
+        T_1 = self.T_top + (1/(self.alpha_1**2))(np.log(self.p_top/self.P_1))**2 
+        T_2 = self.T_top + (1/(self.alpha_1**2))(np.log(self.P_1/self.p_top))**2 - (1/(self.alpha_2**2))(np.log(self.P_1/self.P_2))**2
+        T_3 = self.T_2 + (1/(self.alpha_2**2))(np.log(self.P_3/self.P_2))**2
+
+        # implementation in Madhu & Seager 2009 uses a Levenberg-Marquardt fitting 
+
+        sp.optimize.least_squares(fun,x0,method='lm')
 
     ### This is to tell TauREx what outputs to save
     def write(self, output):
