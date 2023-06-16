@@ -209,4 +209,4 @@ class MadhuSeager2009(TemperatureProfile):
     ### This is the keyword to use in the parfile
     @classmethod
     def input_keywords(cls):
-        return ['MadhuSeager2009', ]
+        return ['MadhuSeager2009', 'madhuseager2009']
