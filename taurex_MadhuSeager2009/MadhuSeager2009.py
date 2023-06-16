@@ -4,7 +4,7 @@ from taurex.data.fittable import fitparam
 import scipy as sp
 
 
-class MadhuTPProfile(TemperatureProfile):
+class MadhuSeager2009(TemperatureProfile):
     """
 
     TP profile from Madhusudhan and Seager 2009, arXiv:0910.147v2

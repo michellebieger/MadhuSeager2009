@@ -1,1 +1,1 @@
-from .MadhuSeager2009 import MadhuTPProfile
+from .MadhuSeager2009 import MadhuSeager2009
