@@ -4,7 +4,7 @@ from taurex.data.fittable import fitparam
 import scipy as sp
 
 
-class RandomTemperatureProfile(TemperatureProfile):
+class MadhuTPProfile(TemperatureProfile):
     """
 
     TP profile from Madhusudhan and Seager 2009, arXiv:0910.147v2
@@ -13,27 +13,23 @@ class RandomTemperatureProfile(TemperatureProfile):
     -----------
         T_top: float
             temperature at the top of the atmosphere in Kelvin
-        T_1: float
-            temperature at Layer 1 of the atmosphere in Kelvin
-        T_2: float
-            temperature at Layer 2 of the atmosphere in Kelvin
-        T_3: float
-            temperature at Layer 3 (deepest layer) of the atmosphere in Kelvin
-        P_1: float
-            pressure at Layer 1 of the atmosphere in bar
-        P_2: float
-            pressure at Layer 2 of the atmosphere in bar
-        P_3: float
-            pressure at Layer 3 (deepest layer) of the atmosphere in bar
-        alpha_1: float
+        P_top: float
+            pressure at the top of the atmosphere in Pascal (TauREx default)
+        T_1,2,3: float
+            temperature at Layer 1,2,3 (deepest layer) of the atmosphere in Kelvin
+        P_1,2,3: float
+            pressure at Layer 1,2,3 (deepest layer) of the atmosphere in Pascal (TauREx default)
+        alpha_1,2: float
             multiplicative factor
-        alpha_2: float
+            the lower the value the steeper the Layer 1 gradient
+        beta_1,2: float
             multiplicative factor
+            the lower the value the steeper the Layer 2 gradient
     """
 
     ### Initializing the new class
-    def __init__(self, T_top = 1000, T_1 = 500, T_2 = 200, T_3 = 100, P_top = 1e-3, P_1 = 1e-2, P_2 = 1e-1, P_3 = 1e0, alpha_1 = 50, alpha_2 =50):
-        super().__init__('Madhu)
+    def __init__(self, T_top = 1000, P_top = 1, T_1 = 1400, T_2 = 1100, T_3 = 1500, P_1 = 700, P_2 = 9000, P_3 = 1e5, alpha_1 = 50, alpha_2 =50, beta_1 = 0.5, beta_2 = 0.5):
+        super().__init__('Madhuuuuuu')
 
         self.info('MadhuSeager2009 temperature profile initialised')
         self._T_top = T_top
@@ -46,18 +42,125 @@ class RandomTemperatureProfile(TemperatureProfile):
         self._P_3 = P_3 
         self._alpha_1 = alpha_1
         self._alpha_2 = alpha_2 
+        self._beta_1 = beta_1
+        self._beta_2 = beta_2
     
     ### Defining the get and set function for the fitting parameter 'mean'
     @fitparam(param_name='T_top',
-              param_latex='$T_top$',
+              param_latex='$T_{top}$',
               default_fit=False,
-              default_bounds=[300.0, 2000.0])
+              default_bounds=[300.0,2000.0])
     def topTemperature(self):
         return self._T_top
     
     @topTemperature.setter
     def topTemperature(self, value):
         self._T_top = value
+        
+    @fitparam(param_name='P_top',
+              param_latex='$P_{top}$',
+              default_fit=False,
+              default_bounds=[1,700])
+    def topPressure(self):
+        return self._P_top
+    
+    @topPressure.setter
+    def topPressure(self, value):
+        self._P_top = value
+    
+    @fitparam(param_name='alpha_1',
+              param_latex='$\alpha_{1}$',
+              default_fit=False,
+              default_bounds=[0.15,0.35])
+    def oneAlpha(self):
+        return self._alpha_1
+    
+    @oneAlpha.setter
+    def oneAlpha(self, value):
+        self._alpha_1 = value
+    
+    # a note on the fitting boundaries
+    # for alpha 2: madhu seager 2009
+    # IRS data set constrains α2 to be greater than 0.2
+    # broadband photometry data set constrains to be 0.18 - 0.35 
+    # HST data set constrains to be 0.15 - 0.27
+    
+    @fitparam(param_name='alpha_2',
+              param_latex='$\alpha_{2}$',
+              default_fit=False,
+              default_bounds=[0.15,0.35])
+    def twoAlpha(self):
+        return self._alpha_2
+    
+    @twoAlpha.setter
+    def twoAlpha(self, value):
+        self._alpha_2 = value
+        
+    @fitparam(param_name='T_1',
+              param_latex='$T_{1}$',
+              default_fit=False,
+              default_bounds=[300.0,2000.0])
+    def oneTemperature(self):
+        return self._T_1
+    
+    @oneTemperature.setter
+    def oneTemperature(self, value):
+        self._T_1 = value
+    
+    @fitparam(param_name='T_2',
+              param_latex='$T_{2}$',
+              default_fit=False,
+              default_bounds=[300.0,2000.0])
+    def twoTemperature(self):
+        return self._T_2
+    
+    @twoTemperature.setter
+    def twoTemperature(self, value):
+        self._T_2 = value
+        
+    @fitparam(param_name='T_3',
+              param_latex='$T_{3}$',
+              default_fit=False,
+              default_bounds=[300.0,2000.0])
+    def threeTemperature(self):
+        return self._T_3
+    
+    @threeTemperature.setter
+    def threeTemperature(self, value):
+        self._T_3 = value
+    
+    @fitparam(param_name='P_1',
+              param_latex='$P_{1}$',
+              default_fit=False,
+              default_bounds=[1e5,1])
+    def onePressure(self):
+        return self._P_1
+    
+    @onePressure.setter
+    def onePressure(self, value):
+        self._P_1 = value
+    
+    @fitparam(param_name='P_2',
+              param_latex='$P_{2}$',
+              default_fit=False,
+              default_bounds=[1e5,1])
+    def twoPressure(self):
+        return self._P_2
+    
+    @twoPressure.setter
+    def twoPressure(self, value):
+        self._P_2 = value
+        
+    @fitparam(param_name='P_3',
+              param_latex='$P_{3}$',
+              default_fit=False,
+              default_bounds=[1e5,1])
+    def threePressure(self):
+        return self._P_3
+    
+    @threePressure.setter
+    def threePressure(self, value):
+        self._P_3 = value
     
     ### The key of this class, this provides the temperature profile.
     ### This 'profile()' function is mandatory for all classes inheriting from the TemperatureProfile class.
@@ -65,46 +168,42 @@ class RandomTemperatureProfile(TemperatureProfile):
     def profile(self):
         """Returns stratified pressure-temperature layer with two constraints of continuity at the two layer boundaries, i.e., Layers 1–2 and Layers 2–3
         """
-        # self.T = np.maximum(np.random.normal(self._mean, self._std), 10.0)
-        # T = np.zeros((self.nlayers))
-        # creating an array of temp with the number of layers that taurex sets (i guess from the rad tran)
-        # T[:] = self.T
-        # then have T be that function filling that array (i guess)
-        # return T
-        # this is then the result 
-
-        p_top = 1e-5 
-        # as set within the paper. bar
-        beta = 0.5 
-        # both beta_1 and beta_2 in the paper are set to be 0.5 based on experimental factor 
-
-        self.P_3 = 100 
-        # because three zonal layers set in paper from 10-5 to 100 bar
-
-        self.P_2 = 
-
+        
+        self._T_2 = self._T_top + np.power( (1/self._alpha_1)*np.log(self._P_1/self._P_top) , 1/self._beta_1) - np.power( (1/self._alpha_2)*np.log(self._P_1/self._P_2) , 1/self._beta_2)
+        self._T_3 = self._T_2 + np.power( (1/self._alpha_2)*np.log(self._P_3/self._P_2) , 1/self._beta_2)
+        # continuity conditions from MaduSeager 2009
+        
+        P = self.pressure_profile
         T = np.zeros((self.nlayers))
-
-    
-
-        T_1 = self.T_top + (1/(self.alpha_1**2))(np.log(self.P_top/self.P_1))**2 
-        T_2 = self.T_top + (1/(self.alpha_1**2))(np.log(self.P_1/self.P_top))**2 - (1/(self.alpha_2**2))(np.log(self.P_1/self.P_2))**2
-        T_3 = self.T_2 + (1/(self.alpha_2**2))(np.log(self.P_3/self.P_2))**2
-
-        # implementation in Madhu & Seager 2009 uses a Levenberg-Marquardt fitting 
-
-        sp.optimize.least_squares(fun,x0,method='lm')
+        
+        for i, p in enumerate(P):
+            if (p > self._P_top ) and (p < self._P_1):
+                T[i] = self._T_top + np.power( (1/self._alpha_1)*np.log(p/self._P_top) , 1/self._beta_1)
+            elif (p > self._P_1) and (p < self._P_3):
+                T[i] = self._T_2 + np.power( (1/self._alpha_2)*np.log(p/self._P_2) , 1/self._beta_2)
+            elif (p > self._P_3):
+                T[i] = self._T_3
+            else:
+                T[i] = self._T_top
+                # isothermal in deepest layers of atm
+            
+        return T
 
     ### This is to tell TauREx what outputs to save
     def write(self, output):
         temperature = super().write(output)
         temperature.write_scalar('T_top', self._T_top)
+        temperature.write_scalar('P_top', self._P_top)
         temperature.write_scalar('T_1', self._T_1)
         temperature.write_scalar('T_2', self._T_2)
         temperature.write_scalar('T_3', self._T_3)
         temperature.write_scalar('P_1', self._P_1)
         temperature.write_scalar('P_2', self._P_2)
         temperature.write_scalar('P_3', self._P_3)
+        temperature.write_scalar('alpha_1', self._alpha_1)
+        temperature.write_scalar('alpha_2', self._alpha_2)
+        temperature.write_scalar('beta_1', self._beta_1)
+        temperature.write_scalar('beta_2', self._beta_2)
         return temperature
 
     ### This is the keyword to use in the parfile

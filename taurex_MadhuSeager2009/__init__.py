@@ -1,1 +1,1 @@
-from .MaduSeager2009.py import TemperatureProfile
+from .MaduSeager2009.py import MadhuTPProfile

@@ -12,7 +12,7 @@ requires = []
 install_requires = ['taurex']    
 entry_points = {'taurex.plugins': 'taurex_MadhuSeager2009 = taurex_MadhuSeager2009'}
 
- setup(name='taurex_MadhuSeager2009',
+setup(name='taurex_MadhuSeager2009',
 	author="M. F. Bieger",
 	author_email="michellebieger@live.com",
         license="BSD",
