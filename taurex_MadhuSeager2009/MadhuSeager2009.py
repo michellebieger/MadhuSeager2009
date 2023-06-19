@@ -69,7 +69,7 @@ class MadhuSeager2009(TemperatureProfile):
         self._P_top = value
     
     @fitparam(param_name='alpha_1',
-              param_latex= r'$ \\alpha_{1} $',
+              param_latex= '$\\alpha_{1}$',
               default_fit=False,
               default_bounds=[0.15,0.35])
     def oneAlpha(self):
@@ -86,7 +86,7 @@ class MadhuSeager2009(TemperatureProfile):
     # HST data set constrains to be 0.15 - 0.27
     
     @fitparam(param_name='alpha_2',
-              param_latex= r'$ \\alpha_{2} $',
+              param_latex= '$\\alpha_{2}$',
               default_fit=False,
               default_bounds=[0.15,0.35])
     def twoAlpha(self):
