@@ -2,6 +2,14 @@ from taurex.temperature import TemperatureProfile
 import numpy as np
 from taurex.data.fittable import fitparam
 import scipy as sp
+from taurex.exceptions import InvalidModelException
+
+class InvalidTemperatureException(InvalidModelException): 
+    """
+    Exception, called when atmosphere mix is greater than unity
+    """
+    pass
+
 
 
 class MadhuSeager2009(TemperatureProfile):
@@ -164,17 +172,29 @@ class MadhuSeager2009(TemperatureProfile):
     
     ### The key of this class, this provides the temperature profile.
     ### This 'profile()' function is mandatory for all classes inheriting from the TemperatureProfile class.
+    def check_profile(self,Ppt,Tpt): 
+
+         #P1 > P2 > P3 as a condition 
+         # aka P_top > P_1 > P_2 > P_3 
+        if (any(Ppt[i] <= Ppt[i+1] for i in range(len(Ppt)-1))): 
+            self.warning('Temperature profile is not valid! A pressure point is inverted.')
+            raise InvalidTemperatureException
+
+    
     @property
     def profile(self):
         """Returns stratified pressure-temperature layer with two constraints of continuity at the two layer boundaries, i.e., Layers 1–2 and Layers 2–3
         """
-        
+
         self._T_2 = self._T_top + np.power( (1/self._alpha_1)*np.log(self._P_1/self._P_top) , 1/self._beta_1) - np.power( (1/self._alpha_2)*np.log(self._P_1/self._P_2) , 1/self._beta_2)
         self._T_3 = self._T_2 + np.power( (1/self._alpha_2)*np.log(self._P_3/self._P_2) , 1/self._beta_2)
         # continuity conditions from MaduSeager 2009
         
         P = self.pressure_profile
         T = np.zeros((self.nlayers))
+
+        self.check_profile(P,T)
+        # check that P, T still viable
         
         for i, p in enumerate(P):
             if (p > self._P_top ) and (p < self._P_1):
