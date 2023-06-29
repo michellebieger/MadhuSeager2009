@@ -1,0 +1,123 @@
+[Global]
+xsec_path = /home/mb987/data/xsec/xsec_sampled_R15000_0.3-50
+cia_path = /home/mb987/data/hitran
+use_radis = False
+radis_grid = 5000,12000,200
+
+
+[Chemistry]
+chemistry_type = ace
+metallicity = 1
+co_ratio = 0.55
+fill_gases = H2,He
+ratio = 0.17
+
+    [[H2O]]
+    gas_type = constant
+    mix_ratio = 1e-5
+    
+    [[CH4]]
+    gas_type = constant
+    mix_ratio = 1e-2
+
+    [[CO]]
+    gas_type = constant
+    mix_ratio = 1e-2
+
+    [[CO2]]
+    gas_type = constant
+    mix_ratio = 1e-6
+
+    [[N2]]
+    gas_type = constant
+    mix_ratio = 1e-2
+
+    
+[Temperature]
+profile_type = MadhuSeager2009
+T_top=3200
+P_top=1
+T_1 = 1100
+T_2 = 1500
+T_3 = 2000
+P_1 = 700
+P_2 = 9e3
+P_3 = 1e5
+alpha_1 = 0.7
+alpha_2 = 0.2
+beta_1 = 0.5
+beta_2 = 0.5
+
+[Pressure]
+profile_type = Simple
+atm_min_pressure = 1e-1
+atm_max_pressure = 1e6
+nlayers = 100
+
+[Planet]
+planet_type = Simple
+planet_mass = 0.85
+planet_radius = 1.53
+albedo = 0
+
+[Star]
+star_type = blackbody
+radius = 1.51
+temperature = 6600
+
+[Model]
+model_type = transmission
+
+    [[Absorption]]
+
+    [[CIA]]
+    cia_pairs = H2-He,H2-H2
+    
+    [[Rayleigh]]
+
+[Observation]
+observed_spectrum = 
+#grid_type = native
+
+
+[Optimizer]
+optimizer = multinest
+num_live_points = 1200
+max_iterations = 0
+evidence_tolerance = 0.5
+resume=False
+verbose_output= True
+multi_nest_path = 
+
+[Fitting]
+planet_radius:fit = False
+planet_radius:bounds = 1.5,2
+planet_mass:fit = False
+planet_mass:bounds = 0.1, 0.5
+
+H2O:fit = True
+H2O:bounds = 1e-2,1e-12
+
+T_top:fit = True
+T_top:bounds=100,3000
+T_1:fit = True
+T_1:bounds=100,3000
+#T_2:fit = True
+#T_2:bounds=100,3000
+#T_3:fit = True
+#T_3:bounds=100,3000
+#P_top:fit = True
+#P_top:bounds=1e5,1
+P_1:fit = True
+P_1:bounds=1e5,1
+P_1:mode=log
+P_2:fit = True
+P_2:bounds=1e5,1
+P_2:mode=log
+P_3:fit = True
+P_3:bounds=1e5,1 
+P_3:mode=log
+alpha_1:fit = True
+alpha_1:bounds=0.15,0.27
+alpha_2:fit = True
+alpha_2:bounds=0.15,0.27

@@ -40,6 +40,18 @@ $ taurex --plugins
 
 If there are no errors, you have been successful!
 
+## Usage
+
+You can use the ExampleNotebook in the repository, which runs this PT profile with TauREx as a forward model in a Jupyter Notebook. You can further modify the Notebook and include retrievals if desired.
+
+To use the MadhuSeager2009 PT profile in a .par file and run TauREx on a command line, you can call the profile with either the keywords 'MadhuSeager2009' or 'madhuseager2009' under the [Temperature] parameter:
+
+```console
+$ profile_type = MadhuSeager2009
+```
+
+An example .par file exists in this repository with all the parameters relevant to this PT profile--just add in your desired values/further parameters as normal when using TauREx and any other TauREx plugins.
+
 ## License
 
 Distributed under the terms of the [GPL 3.0 license][license],
