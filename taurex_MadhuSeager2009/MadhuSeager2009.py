@@ -172,11 +172,12 @@ class MadhuSeager2009(TemperatureProfile):
     
     ### The key of this class, this provides the temperature profile.
     ### This 'profile()' function is mandatory for all classes inheriting from the TemperatureProfile class.
-    def check_profile(self,Ppt,Tpt): 
 
-         #P1 > P2 > P3 as a condition 
-         # aka P_top > P_1 > P_2 > P_3 
-        if (any(Ppt[i] <= Ppt[i+1] for i in range(len(Ppt)-1))): 
+    
+    def check_profile(self,Ppt): 
+
+         # P1 < P2 < P3 as a condition 
+        if not (any(Ppt[i] <= Ppt[i+1] for i in range(len(Ppt)-1))): 
             self.warning('Temperature profile is not valid! A pressure point is inverted.')
             raise InvalidTemperatureException
 
@@ -193,9 +194,11 @@ class MadhuSeager2009(TemperatureProfile):
         P = self.pressure_profile
         T = np.zeros((self.nlayers))
 
-        self.check_profile(P,T)
-        # check that P, T still viable
-        
+        less_P = [self._P_top,self._P_1,self._P_2,self._P_3]
+#         print(less_P)
+        self.check_profile(less_P)
+        # check that P still viable--and that they follow the convention P_top < P_1 < P_2 < P_3 
+    
         for i, p in enumerate(P):
             if (p > self._P_top ) and (p < self._P_1):
                 T[i] = self._T_top + np.power( (1/self._alpha_1)*np.log(p/self._P_top) , 1/self._beta_1)
@@ -208,6 +211,7 @@ class MadhuSeager2009(TemperatureProfile):
                 # isothermal in deepest layers of atm
             
         return T
+    
 
     ### This is to tell TauREx what outputs to save
     def write(self, output):
