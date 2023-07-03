@@ -176,10 +176,15 @@ class MadhuSeager2009(TemperatureProfile):
     
     def check_profile(self,Ppt): 
 
+        for i in range(len(Ppt)-1):
+            if Ppt[i+1] - Ppt[i] < 0:
+                self.warning('Temperature profile is not valid! PLEAAASE Michelle, give the man some right P points! :) ')
+                raise InvalidTemperatureException
+
          # P1 < P2 < P3 as a condition 
-        if not (any(Ppt[i] <= Ppt[i+1] for i in range(len(Ppt)-1))): 
-            self.warning('Temperature profile is not valid! A pressure point is inverted.')
-            raise InvalidTemperatureException
+        #if not (any(Ppt[i] <= Ppt[i+1] for i in range(len(Ppt)-1))): 
+        #    self.warning('Temperature profile is not valid! A pressure point is inverted.')
+        #    raise InvalidTemperatureException
 
     
     @property
