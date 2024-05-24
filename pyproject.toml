@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "taurex_MadhuSeager2009"
-version = "0.0.2"
+version = "0.0.3"
 description = "MadhuSeager2009"
 authors = ["M. F. Bieger <mb987@exeter.ac.uk>"]
 license = "GPL-3.0"
@@ -14,7 +14,7 @@ python = "^3.8"
 taurex = "^3.1.1a0"
 
 [tool.poetry.scripts]
-MadhuSeager2009 = "MadhuSeager2009.__main__:main"
+taurex_MadhuSeager2009 = "taurex_MadhuSeager2009.__main__:main"
 
 [tool.poetry.group.dev.dependencies]
 black = { version = "^22.10.0", allow-prereleases = true }
